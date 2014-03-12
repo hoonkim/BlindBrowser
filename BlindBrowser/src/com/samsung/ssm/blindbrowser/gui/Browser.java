@@ -1,10 +1,12 @@
 package com.samsung.ssm.blindbrowser.gui;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -16,7 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.AbstractTableModel;
 
+import com.samsung.ssm.blindbrowser.device.DeviceControl;
 import com.samsung.ssm.blindparser.BlindParser;
+import com.samsung.ssm.koreantobraille.KoreanToBraille;
 
 /**
  * 
@@ -26,15 +30,6 @@ import com.samsung.ssm.blindparser.BlindParser;
  * 
  */
 public class Browser extends JFrame {
-
-	/**
-	 * 장치로 스트링을 전달.
-	 * 
-	 * @param str
-	 *            전달할 스트링.
-	 * 
-	 */
-	final native void transferString(final int str);
 
 	/**
 	 * 
@@ -52,13 +47,9 @@ public class Browser extends JFrame {
 	 */
 	final native int open();
 
-	static {
-		System.loadLibrary("BlindBrowser");
-	}
-
 	/**
 	 * 기본 브라우저 창 너비.
-	 */	
+	 */
 	private static final int DEFAULT_WINDOW_WIDTH = 1024;
 
 	/**
@@ -102,12 +93,25 @@ public class Browser extends JFrame {
 	private BlindParser parser;
 
 	/**
+	 * 장치 컨트롤러.
+	 */
+	private DeviceControl deviceControl;
+
+	/**
 	 * 윈도우 생성.
 	 * 
 	 * @param url
 	 *            불러올 페이지 URL.
 	 */
 	public Browser(final String url) {
+		try {
+			deviceControl = new DeviceControl();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+
 		panel = null;
 
 		setSize(DEFAULT_WINDOW_WIDTH, DEAFULT_WINDOW_HEIGHT);
@@ -297,13 +301,12 @@ public class Browser extends JFrame {
 					urlField.requestFocus();
 					urlField.selectAll();
 				} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
-					/* 스페이스 키. JNI로 연결되어 있음 */
-					transferString(table
+					/* 스페이스 키. 장치로 연결되어 있음 */
+					deviceControl.send(table
 							.getModel()
 							.getValueAt(table.getSelectedRow(),
-									table.getSelectedColumn()).toString()
-							.length());
+									table.getSelectedColumn()).toString());
+
 				} else if (e.getKeyCode() == KeyEvent.VK_ENTER
 						&& table.getSelectedColumn() == 0) {
 
