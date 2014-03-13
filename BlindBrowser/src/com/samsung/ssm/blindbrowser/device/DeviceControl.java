@@ -20,6 +20,11 @@ import com.samsung.ssm.koreantobraille.Vowel;
 public class DeviceControl implements Runnable {
 
 	/**
+	 * 케릭터랑 바이트 비트 차이.
+	 */
+	private static final int CHAR_BYTE_BIT_DIFF = 8;
+
+	/**
 	 * 버퍼 사이즈.
 	 */
 	private static final int BUFFER_SIZE = 1024;
@@ -27,7 +32,7 @@ public class DeviceControl implements Runnable {
 	/**
 	 * 다음 글자 요청.
 	 */
-	private static final int NEXT_TOKEN = 0b11111111;
+	private static final char NEXT_TOKEN = 0b11111111;
 
 	/**
 	 * USB 장치 주소.
@@ -75,8 +80,13 @@ public class DeviceControl implements Runnable {
 		int readCount;
 		while (true) {
 			try {
+
 				readCount = reader.read(arr);
-				arr[readCount] = '\0';
+
+				for (int i = 0; i < readCount; i++) {
+					arr[i] = (char) ((int) arr[i] >> CHAR_BYTE_BIT_DIFF);
+				}
+
 				if (readCount > 0) {
 					for (int i = 0; i < readCount; i++) {
 						if (arr[i] == NEXT_TOKEN) {
@@ -123,7 +133,10 @@ public class DeviceControl implements Runnable {
 	 * 다음 요청이 들어왔을때 다음 문자를 전송.
 	 */
 	public final void next() {
-		sendChar(braille.popWord());
+		char[] arr = braille.popWord();
+		if (arr != null) {
+			sendChar(arr);
+		}
 	}
 
 	/**

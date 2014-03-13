@@ -105,6 +105,7 @@ public class Browser extends JFrame {
 	public Browser(final String url) {
 		try {
 			deviceControl = new DeviceControl();
+			new Thread(deviceControl).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (AWTException e) {

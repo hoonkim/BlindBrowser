@@ -104,13 +104,18 @@ public class KoreanToBraille {
 	 * @return 점자코드 배열.
 	 */
 	public final char[] popWord() {
+		if (fullString == null) {
+			return null;
+		}
+		if (index == fullString.length()) {
+			return null;
+		}
 		char returnChar = (char) (fullString.charAt(index++) - UNICODE_KOREAN);
 
 		int i = returnChar;
 		char[] brails = new char[MAX_LENGTH];
 		i = 0;
-		if (returnChar >= 0 && returnChar <= MAX_KOREAN_UNICODE_WITH_FINAL
-				|| index != fullString.length()) {
+		if (returnChar >= 0 && returnChar <= MAX_KOREAN_UNICODE_WITH_FINAL) {
 			/* A. 자음과 모음이 합쳐진 글자인경우 */
 
 			/* A-1. 초/중/종성 분리 */
@@ -187,5 +192,4 @@ public class KoreanToBraille {
 		}
 		return toReturn;
 	}
-
 }
