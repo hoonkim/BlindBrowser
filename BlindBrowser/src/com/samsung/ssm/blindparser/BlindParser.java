@@ -16,6 +16,11 @@ import org.jsoup.nodes.Element;
 public class BlindParser {
 
 	/**
+	 * 이거보다 짧은 텍스트(링크가 아닌)는 출력하지 않는다.
+	 */
+	private static final int TEXT_MINIMUM_LENGTH = 10;
+
+	/**
 	 * 파싱된 페이지 내용.
 	 */
 	private Document page = null;
@@ -68,7 +73,7 @@ public class BlindParser {
 			} else {
 				page = Jsoup.connect(url).userAgent("Mozilla").get();
 			}
-			
+
 			/* 링크만 파싱함. */
 			for (Element e : page.getAllElements()) {
 				if (e.attr("href").startsWith("http")// @formatter:off
@@ -97,7 +102,8 @@ public class BlindParser {
 			for (Element e : page.getAllElements()) {
 				if (e.text().length() > 1) {
 					if (e.parent() != null && !e.hasAttr("href")) {
-						if (e.childNodeSize() <= 2) {
+						if (e.childNodeSize() <= 2
+								&& e.text().length() > TEXT_MINIMUM_LENGTH) {
 							texts.add(e.text());
 						}
 					}

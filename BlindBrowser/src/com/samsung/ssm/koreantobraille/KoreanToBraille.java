@@ -125,7 +125,25 @@ public class KoreanToBraille {
 
 			/* A-2. result에 담기 */
 			brails[i++] = firstConsonents[chosung].toChar();
-			brails[i++] = arrJungSung[jungsung].toChar();
+
+			/* 중성중에 점자 조합으로 된 중성 처리.(ㅟ, ㅒ, ㅙ, ㅞ) */
+			if (arrJungSung[jungsung] == Vowel.NL) {
+				/* ㅟ는 ㅜ + ㅐ의 조합으로 점자가 구성된다. 이하 설명 생략 */
+				brails[i++] = Vowel.N.toChar();
+				brails[i++] = Vowel.O.toChar();
+			} else if (arrJungSung[jungsung] == Vowel.OO) {
+				brails[i++] = Vowel.I.toChar();
+				brails[i++] = Vowel.O.toChar();
+			} else if (arrJungSung[jungsung] == Vowel.HO) {
+				brails[i++] = Vowel.HK.toChar();
+				brails[i++] = Vowel.O.toChar();
+			} else if (arrJungSung[jungsung] == Vowel.NP) {
+				brails[i++] = Vowel.NJ.toChar();
+				brails[i++] = Vowel.O.toChar();
+			} else {
+				/* 나머지 일반 모음들은 그냥 그대로 출력. */
+				brails[i++] = arrJungSung[jungsung].toChar();
+			}
 
 			/* 자음분리 */
 			if (jongsung != 0x0000) {
