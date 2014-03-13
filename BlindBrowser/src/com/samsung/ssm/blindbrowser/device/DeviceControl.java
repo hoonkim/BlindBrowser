@@ -30,6 +30,12 @@ public class DeviceControl implements Runnable {
 	private static final int NEXT_TOKEN = 0b11111111;
 
 	/**
+	 * USB 장치 주소.
+	 */
+	private static final String USB_DEVICE = "\\\\?\\USB#VID_10C4"
+			+ "&PID_EA60#0001#{3d74c75d-9d60-4a43-824c-24da88d52aa6}";
+
+	/**
 	 * 파일 리더.
 	 */
 	private FileReader reader = null;
@@ -57,10 +63,8 @@ public class DeviceControl implements Runnable {
 	 *             로봇을 위한 예외처리.
 	 */
 	public DeviceControl() throws IOException, AWTException {
-		reader = new FileReader("\\\\?\\USB#VID_10C4&PID_EA60#0001#"
-				+ "{3d74c75d-9d60-4a43-824c-24da88d52aa6}");
-		writer = new FileWriter("\\\\?\\USB#VID_10C4&PID_EA60#0001#"
-				+ "{3d74c75d-9d60-4a43-824c-24da88d52aa6}");
+		reader = new FileReader(USB_DEVICE);
+		writer = new FileWriter(USB_DEVICE);
 		braille = new KoreanToBraille();
 		robot = new Robot();
 	}
