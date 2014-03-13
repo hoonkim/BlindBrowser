@@ -20,7 +20,6 @@ import javax.swing.table.AbstractTableModel;
 
 import com.samsung.ssm.blindbrowser.device.DeviceControl;
 import com.samsung.ssm.blindparser.BlindParser;
-import com.samsung.ssm.koreantobraille.KoreanToBraille;
 
 /**
  * 

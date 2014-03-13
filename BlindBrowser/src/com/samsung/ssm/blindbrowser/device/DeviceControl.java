@@ -83,6 +83,7 @@ public class DeviceControl implements Runnable {
 					}
 				}
 			} catch (IOException e) {
+				System.out.print("");
 			}
 
 		}
