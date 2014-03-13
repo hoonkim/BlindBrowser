@@ -147,8 +147,34 @@ public class KoreanToBraille {
 
 			/* 자음분리 */
 			if (jongsung != 0x0000) {
-				/* A-3. 종성이 존재할경우 result에 담는다 */
-				brails[i++] = arrJongSung[jongsung].toChar();
+				/* 종성 처리. ㄳ, ㄵ, ㄶ..등 복합 자음은 따로 분류해서 처리하고 나머진 그대로 담는다. */
+				if (arrJongSung[jongsung] == LastConsonent.RT) {
+					brails[i++] = LastConsonent.R.toChar();
+					brails[i++] = LastConsonent.T.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.SW) {
+					brails[i++] = LastConsonent.S.toChar();
+					brails[i++] = LastConsonent.W.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.SG) {
+					brails[i++] = LastConsonent.S.toChar();
+					brails[i++] = LastConsonent.G.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.FR) {
+					brails[i++] = LastConsonent.F.toChar();
+					brails[i++] = LastConsonent.R.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.FA) {
+					brails[i++] = LastConsonent.F.toChar();
+					brails[i++] = LastConsonent.A.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.FQ) {
+					brails[i++] = LastConsonent.F.toChar();
+					brails[i++] = LastConsonent.Q.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.FT) {
+					brails[i++] = LastConsonent.F.toChar();
+					brails[i++] = LastConsonent.T.toChar();
+				} else if (arrJongSung[jongsung] == LastConsonent.FX) {
+					brails[i++] = LastConsonent.F.toChar();
+					brails[i++] = LastConsonent.X.toChar();
+				} else {
+					brails[i++] = arrJongSung[jongsung].toChar();
+				}
 			}
 
 		} else {
